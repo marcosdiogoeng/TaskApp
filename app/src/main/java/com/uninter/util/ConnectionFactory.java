@@ -3,6 +3,7 @@ package com.uninter.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class ConnectionFactory {
     public static final String DRIVER = "com.mysql.jdbc.Driver";
@@ -16,6 +17,16 @@ public class ConnectionFactory {
             return DriverManager.getConnection(URL, USER, PASS);
         } catch (Exception ex){
             throw new RuntimeException("Erro na conexão com o banco de dados", ex);
+        }
+    }
+
+    public static void closeConnection(Connection connection) {
+        try {
+            if (connection != null){
+                connection.close();
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Erro ao fechar a conexão com o banco de dados",ex);
         }
     }
 }
