@@ -54,10 +54,11 @@ public class TaskController {
             statement.setDate(6, new Date(task.getDeadline().getTime()));
             statement.setDate(7, new Date(task.getCreatedAt().getTime()));
             statement.setDate(8, new Date(task.getUpdatedAt().getTime()));
+            statement.setInt(9, task.getId());
             statement.execute();
 
         } catch (Exception e){
-            throw new RuntimeException("Erro ao atualizar o banco de dados" + e.getMessage(),e);
+            throw new RuntimeException("Erro ao atualizar a tarefa" + e.getMessage(),e);
         } finally {
             ConnectionFactory.closeConnection(connection, statement);
         }
@@ -66,6 +67,7 @@ public class TaskController {
         String sql = "DELETE FROM tasks WHERE id = ?";
         Connection connection = null;
         PreparedStatement statement = null;
+
         try{
             connection = ConnectionFactory.getConnection();
             statement = connection.prepareStatement(sql);
@@ -106,12 +108,11 @@ public class TaskController {
             }
 
         }catch (Exception ex){
-            throw new RuntimeException("" + ex.getMessage(), ex);
+            throw new RuntimeException("Erro ao buscar a tarefa" + ex.getMessage(), ex);
 
         }finally {
-            ConnectionFactory.closeConnection(connection, statement);
+            ConnectionFactory.closeConnection(connection, statement, resultSet);
         }
-
-        return null;
+        return tasks;
     }
 }
